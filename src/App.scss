@@ -3484,3 +3484,23 @@ select {
 .height-22 {
 	height: 22px;
 }
+
+.mobileTable{
+  a {
+    font-family: 'archia';
+    color: $purple;
+    font-size: 14px !important;
+    text-decoration: underline;
+  }
+
+  p {
+    font-family: 'archia';
+    font-size: 14px !important;
+    text-align: justify;
+
+    // .read-more-button {
+    //   color: $blue;
+    //   cursor: pointer;
+    // }
+  }
+}
