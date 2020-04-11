@@ -380,9 +380,7 @@ function ResourceTable({columns, data, isDesktop}) {
                         {row.values['nameoftheorganisation']}
                       </a>
                       <h3>Phone</h3>
-                      <a href={`tel:${row.values['phonenumber']}`}>
-                        {row.values['phonenumber']}
-                      </a>
+                      <p>{row.values['phonenumber']}</p>
                       <h3>Description</h3>
                       <p>{row.values['descriptionandorserviceprovided']}</p>
                     </div>
