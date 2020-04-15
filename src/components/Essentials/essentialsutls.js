@@ -52,31 +52,78 @@ export const getFormattedLink = (initialValue) => {
   }
   return s3;
 };
-export const renderCell = (celli) => {
-  const value = celli.cell.value;
-  // console.log(celli);
-  let renderedvalue = '';
-  const link = celli.row.allCells[5].value.split(',')[0];
 
-  if (celli.column.id === 'contact') renderedvalue = getFormattedLink(value);
-  else if (celli.column.id === 'phonenumber') {
-    // renderedvalue = String(JSON.parse(JSON.stringify(getNumbersLink(value))).numberList).replace(/,/g, '<br>');
-    renderedvalue = getFormattedLink(value);
-  } else if (celli.column.id === 'nameoftheorganisation') {
-    if (link !== '')
-      renderedvalue = `<a href=${link} target="_blank">${value}</a>`;
-    else renderedvalue = value;
-  } else renderedvalue = value;
-
-  return (
-    <div
-      className="tablecelldata"
-      dangerouslySetInnerHTML={{
-        __html: renderedvalue,
-      }}
-    ></div>
-  );
+const customJoinHighlight = (list, joinVals) => {
+  let result = '';
+  for (let i = 0; i < list.length - 1; i++) {
+    result +=
+      list[i] +
+      '<span style="background-color: yellow">' +
+      joinVals[i] +
+      '</span>';
+  }
+  result += list[i];
+  // console.log(result);
+  return result;
 };
+
+const customJoinHighlightMobile = (list, joinVals) => {
+  const result = [];
+  for (let i = 0; i < list.length - 1; i++) {
+    result.push(<span key={i}>{list[i]}</span>);
+    result.push(<span style={{backgroundColor: 'yellow'}}>{joinVals[i]}</span>);
+  }
+  result.push(<span key={i}>{list[i]}</span>);
+  // console.log(result);
+  return result;
+};
+
+export const getHighlightedText = (text, searchValue, type) => {
+  // uses searchValue state!!
+  if (searchValue === '') {
+    return text;
+  }
+
+  const regexObject = new RegExp(searchValue, 'gi');
+
+  const parts = text.split(regexObject);
+  if (parts.length === 1) {
+    return text;
+  } else {
+    const matches = [...text.matchAll(regexObject)];
+    if (type === 'desktop') {
+      return customJoinHighlight(parts, matches);
+    } else {
+      return customJoinHighlightMobile(parts, matches);
+    }
+  }
+};
+
+// export const renderCell = (celli) => {
+//   const value = celli.cell.value;
+//   // console.log(celli.getHooks());
+//   let renderedvalue = '';
+//   const link = celli.row.allCells[5].value.split(',')[0];
+
+//   if (celli.column.id === 'contact') renderedvalue = getFormattedLink(getHighlightedText(value));
+//   else if (celli.column.id === 'phonenumber') {
+//     // renderedvalue = String(JSON.parse(JSON.stringify(getNumbersLink(value))).numberList).replace(/,/g, '<br>');
+//     renderedvalue = getFormattedLink(getHighlightedText(value));
+//   } else if (celli.column.id === 'nameoftheorganisation') {
+//     if (link !== '')
+//       renderedvalue = `<a href=${link} target="_blank">${getHighlightedText(value)}</a>`;
+//     else renderedvalue = getHighlightedText(value);
+//   } else renderedvalue = getHighlightedText(value);
+
+//   return (
+//     <div
+//       className="tablecelldata"
+//       dangerouslySetInnerHTML={{
+//         __html: renderedvalue,
+//       }}
+//     ></div>
+//   );
+// };
 
 // searchbar stuff
 
@@ -89,12 +136,14 @@ export const getSuggestions = (value, resources) => {
     : resources.filter(
         (resource) =>
           resource.category.toLowerCase().includes(inputValue.toLowerCase()) ||
+          resource.city.toLowerCase().includes(inputValue.toLowerCase()) ||
           resource.descriptionandorserviceprovided
             .toLowerCase()
             .includes(inputValue.toLowerCase()) ||
           resource.nameoftheorganisation
             .toLowerCase()
-            .includes(inputValue.toLowerCase())
+            .includes(inputValue.toLowerCase()) ||
+          resource.state.toLowerCase().includes(inputValue.toLowerCase())
       );
 };
 

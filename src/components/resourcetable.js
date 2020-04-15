@@ -6,12 +6,15 @@ import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {
-  renderCell,
+  // renderCell,
+  getHighlightedText,
+  getFormattedLink,
   getSuggestions,
   getSuggestionValue,
   renderSuggestion,
 } from './Essentials/essentialsutls';
 import TableAccordion from './Essentials/essentialsaccordionmobile';
+
 function ResourceTable({
   columns,
   data,
@@ -27,6 +30,41 @@ function ResourceTable({
   const prevIndianState = useRef('');
   const prevCity = useRef('');
   const prevCategory = useRef('');
+
+  const renderCell = (celli) => {
+    const value = celli.cell.value;
+    // console.log(celli.getHooks());
+    let renderedvalue = '';
+    const link = celli.row.allCells[5].value.split(',')[0];
+
+    if (celli.column.id === 'contact')
+      renderedvalue = getFormattedLink(
+        getHighlightedText(value, searchValue, 'desktop')
+      );
+    else if (celli.column.id === 'phonenumber') {
+      // renderedvalue = String(JSON.parse(JSON.stringify(getNumbersLink(value))).numberList).replace(/,/g, '<br>');
+      renderedvalue = getFormattedLink(
+        getHighlightedText(value, searchValue, 'desktop')
+      );
+    } else if (celli.column.id === 'nameoftheorganisation') {
+      if (link !== '')
+        renderedvalue = `<a href=${link} target="_blank">${getHighlightedText(
+          value,
+          searchValue,
+          'desktop'
+        )}</a>`;
+      else renderedvalue = getHighlightedText(value, searchValue, 'desktop');
+    } else renderedvalue = getHighlightedText(value, searchValue, 'desktop');
+
+    return (
+      <div
+        className="tablecelldata"
+        dangerouslySetInnerHTML={{
+          __html: renderedvalue,
+        }}
+      ></div>
+    );
+  };
 
   useEffect(() => {
     if (
@@ -48,9 +86,9 @@ function ResourceTable({
     setSearchValue(newValue);
   };
 
-  const onSuggestionsFetchRequested = ({value}) => {
-    setSuggestions(getSuggestions(value, data));
-  };
+  // const onSuggestionsFetchRequested = ({value}) => {
+  //   setSuggestions(getSuggestions(value, data));
+  // };
 
   const inputProps = {
     placeholder: '',
@@ -98,7 +136,7 @@ function ResourceTable({
       <div className="searchbar">
         <Autosuggest
           suggestions={suggestions}
-          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsFetchRequested={() => {}}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
@@ -141,7 +179,7 @@ function ResourceTable({
               <tbody {...getTableBodyProps()}>
                 {rows.map((row, i) => {
                   prepareRow(row);
-                  console.log(row);
+                  // console.log(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell, cellindex) => {
@@ -157,7 +195,9 @@ function ResourceTable({
               </tbody>
             </table>
           )}
-          {!isDesktop && <TableAccordion rows={rows} />}
+          {!isDesktop && (
+            <TableAccordion rows={rows} searchValue={searchValue} />
+          )}
         </div>
       </InfiniteScroll>
     </React.Fragment>
