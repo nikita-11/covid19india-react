@@ -55,7 +55,8 @@ export const getFormattedLink = (initialValue) => {
 
 const customJoinHighlight = (list, joinVals) => {
   let result = '';
-  for (let i = 0; i < list.length - 1; i++) {
+  let i = 0;
+  for (i = 0; i < list.length - 1; i++) {
     result +=
       list[i] +
       '<span style="background-color: yellow">' +
@@ -69,7 +70,8 @@ const customJoinHighlight = (list, joinVals) => {
 
 const customJoinHighlightMobile = (list, joinVals) => {
   const result = [];
-  for (let i = 0; i < list.length - 1; i++) {
+  let i = 0;
+  for (i = 0; i < list.length - 1; i++) {
     result.push(<span key={i}>{list[i]}</span>);
     result.push(<span style={{backgroundColor: 'yellow'}}>{joinVals[i]}</span>);
   }
