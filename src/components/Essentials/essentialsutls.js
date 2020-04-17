@@ -2,12 +2,14 @@ import React from 'react';
 export const getNumbersLink = (initialValue) => {
   // const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
   const numbf = initialValue.split(',');
-
-  const numbg = /^\d{5,12}$/g;
-  const numberList = numbf.map((iv, i) => {
-    iv = iv.trim();
-    return iv.replace(numbg, '<a href="tel:$&">$&</a>');
+  const numberList = numbf.map((el) => {
+    return `<a href="tel:${el}">${el}</a>`;
   });
+  // const numbg = /^\d{3,12}$/g;
+  // const numberList = numbf.map((iv, i) => {
+  //   iv = iv.trim();
+  //   return iv.replace(numbg, '<a href="tel:$&">$&</a>');
+  // });
   return {numberList};
 };
 export const getFormattedLinkForAccordion = (initialValue) => {
