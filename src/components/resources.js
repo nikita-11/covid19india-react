@@ -369,7 +369,7 @@ function Resources(props) {
           url: 'https://www.covid19india.org/essentials',
         })
         .then()
-        .catch((error) => console.log(error));
+        .catch((error) => {});
     } else {
       openSharingLink(message);
     }
