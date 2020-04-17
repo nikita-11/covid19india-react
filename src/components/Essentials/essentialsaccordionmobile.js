@@ -69,7 +69,6 @@ function TableAccordion({rows, searchValue}) {
   const handleExpansionChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  // console.log(searchValue);
   return (
     <React.Fragment>
       {rows.map((row, i) => {

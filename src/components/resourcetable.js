@@ -33,7 +33,6 @@ function ResourceTable({
 
   const renderCell = (celli) => {
     const value = celli.cell.value;
-    // console.log(celli.getHooks());
     let renderedvalue = '';
     const link = celli.row.allCells[5].value.split(',')[0];
 
@@ -185,7 +184,6 @@ function ResourceTable({
               <tbody {...getTableBodyProps()}>
                 {rows.map((row, i) => {
                   prepareRow(row);
-                  // console.log(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell, cellindex) => {
