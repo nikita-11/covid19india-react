@@ -82,6 +82,12 @@ function ResourceTable({
     }
   }, [searchValue, data, category, indianstate, city]);
 
+  useEffect(() => {
+    if (suggestions.length === 0 && suggestions.length < totalCount) {
+      onScrollUpdate();
+    }
+  }, [suggestions, totalCount, onScrollUpdate]);
+
   const onChange = (event, {newValue}) => {
     setSearchValue(newValue);
   };
@@ -145,8 +151,8 @@ function ResourceTable({
         />
       </div>
       <InfiniteScroll
-        dataLength={data.length}
-        hasMore={data.length < totalCount}
+        dataLength={suggestions.length}
+        hasMore={suggestions.length < totalCount}
         next={onScrollUpdate}
         loader={<h4>Fetching more information, please wait.</h4>}
         style={
